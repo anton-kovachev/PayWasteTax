@@ -1,0 +1,11 @@
+﻿<vm:ObligationViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:SolidWasteTaxesUserApplication.ViewModels"
+    DebtorIdentityNumber="8606084487"
+    CurrentYearObligations="200"
+    PreviousYearsObligations="150"
+    InterestsAmount="50"
+    SpecificWasteObligations="70">
+
+</vm:ObligationViewModel>

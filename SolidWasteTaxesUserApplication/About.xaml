@@ -1,0 +1,60 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="SolidWasteTaxesUserApplication.About"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <!--TitlePanel contains the name of the application and page title-->
+
+        <Rectangle Grid.Row="0" Height="34" Fill="#FF457100" Margin="39,0,51,0" VerticalAlignment="Bottom"  />
+        <TextBlock FontWeight="Bold" HorizontalAlignment="Center"  VerticalAlignment="Bottom" Foreground="WhiteSmoke" Text="Solid Waste Taxes Information" />
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Text="{Binding Path=LocalizedResources.AboutPageContent, Source={StaticResource LocalizedStrings}}" FontSize="26" TextWrapping="Wrap" Foreground="Black" Margin="0,0,0,244" Grid.RowSpan="2"/>
+
+
+        <Grid VerticalAlignment="Bottom" Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="78" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+
+            <TextBlock Grid.Row="0" Margin="5,0,0,0" Text="ver 1.0" FontSize="20" Foreground="Black"/>
+
+            <TextBlock Grid.Row="1" Margin="5,0,0,0" Text="{Binding Path=LocalizedResources.CreatedBy, Source={StaticResource LocalizedStrings}}" FontSize="20" Foreground="Black"/>
+
+        </Grid>
+
+        <StackPanel x:Name="FooterContent" VerticalAlignment="Bottom"  Grid.Row="2">
+            <Grid x:Name="FooterRoot" Background="#FF1F1E1E" Height="80">
+
+                <Image Name="imgHome" Source="/images/home.png" Tap="imgHome_Tap" Height="62"  Margin="147,10,155,6" Visibility="Visible" ></Image>
+            </Grid>
+        </StackPanel>
+
+    </Grid>
+
+</phone:PhoneApplicationPage>

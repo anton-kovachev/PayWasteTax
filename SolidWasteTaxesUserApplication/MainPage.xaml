@@ -1,0 +1,256 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="SolidWasteTaxesUserApplication.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <!--Data context is set to sample data above and LayoutRoot contains the root grid where all other page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="#FFE8E8E8" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+
+        <!-- LOCALIZATION NOTE:
+            To localize the displayed strings copy their values to appropriately named
+            keys in the app's neutral language resource file (AppResources.resx) then
+            replace the hard-coded text value between the attributes' quotation marks
+            with the binding clause whose path points to that string name.
+
+            For example:
+
+                Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}"
+
+            This binding points to the template's string resource named "ApplicationTitle".
+
+            Adding supported languages in the Project Properties tab will create a
+            new resx file per language that can carry the translated values of your
+            UI strings. The binding in these examples will cause the value of the
+            attributes to be drawn from the .resx file that matches the
+            CurrentUICulture of the app at run time.
+         -->
+
+        <!--TitlePanel contains the name of the application and page title-->
+     
+        <Image Source="/images/img_header.jpg" Height="62"/>
+        <!--ContentPanel contains LongListSelector and LongListSelector ItemTemplate. Place additional content here-->
+        <StackPanel  x:Name="NavigationaPanel" Grid.Row="1"  Visibility="Visible">
+
+            <Image Source="/images/img_banner1.jpg" Height="312" />
+
+            <Button x:Name="TaxesInformationButton" Click="TaxesInformationButton_Click" Height="93" BorderBrush="#FFE8E8E8">
+                <Button.Content>
+                    <Image Source="/images/img_btn_hp1.png" Height="85" Margin="-50,-30,-50,-50"/>
+                </Button.Content>
+            </Button>
+
+            <Button x:Name="SpecificWasteRequestButton" Click="SpecificWasteRequestButton_Click" Height="93" BorderBrush="#FFE8E8E8">
+                <Button.Content>
+                    <Image Source="/images/img_btn_hp2.png" Height="85" Margin="-50,-30,-50,-50"/>
+                </Button.Content>
+            </Button>
+
+            <Button x:Name="SettingsButton" Click="SettingsButton_Click" Height="93" BorderBrush="#FFE8E8E8">
+                <Button.Content>
+                    <Image Source="images/img_btn_hp3.png" Height="85" Margin="-50,-30,-50,-50" />
+                </Button.Content>
+            </Button>
+        </StackPanel>
+
+        <StackPanel  x:Name="TaxesInformationContent" Visibility="Collapsed" Grid.Row="1">
+
+            <StackPanel Visibility="{Binding TaxesInformationVisible}">
+                
+                <TextBlock x:Name="TaxesInformationHeader" Text="{Binding Path=LocalizedResources.TaxesInformationHeaderLabel,Source={StaticResource LocalizedStrings}}" Foreground="#FF457100" Height="57" FontSize="40" FontWeight="Bold" HorizontalAlignment="Center" Margin="70,20"/>
+                <TextBlock x:Name="WaitingInformationLabel" Grid.Row="0" Grid.Column="0" Text="{Binding DownloadPercent, Mode=OneWay}" Style="{StaticResource WaitingTextBlockStyle}" Grid.ColumnSpan="2" Visibility="{Binding WaitingMessageVisible, Mode=OneWay}" />
+
+                <TextBlock x:Name="FailureInformationLabel" Grid.Row="0" Grid.Column="0" Text="{Binding Path=LocalizedResources.FailureInformationLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource WaitingTextBlockStyle}" Grid.ColumnSpan="2" Visibility="{Binding FailureInformationMessageVisible, Mode=OneWay}" />
+
+                <Grid x:Name="TaxesInformationGrid" Visibility="{Binding InformationVisible , Mode=OneWay}" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock x:Name="CurrentYearTaxesLabel" Grid.Row="0" Grid.Column="0" Text="{Binding Path=LocalizedResources.CurrentYearTaxesLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TextBlockInformationLabelStyle}"  />
+                    <TextBox x:Name="CurrentYearTaxesData" Grid.Row="0" Grid.Column="1"  Text="{Binding CurrentYearObligations, Mode=OneWay}" Style="{StaticResource MainTextBoxStyle}" IsHitTestVisible="False"/>
+
+                    <TextBlock x:Name="PreviousYearsTaxesLabel" Grid.Row="1" Grid.Column="0" Text="{Binding Path=LocalizedResources.PreviousYearsTaxestLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TextBlockInformationLabelStyle}"    />
+                    <TextBox x:Name="PreviousYearsTaxesData" Grid.Row="1" Grid.Column="1" Style="{StaticResource MainTextBoxStyle}"  Text="{Binding PreviousYearsObligations, Mode=OneWay}" IsHitTestVisible="False"/>
+                    <TextBlock x:Name="InterestsAmountLabel" Grid.Row="2" Grid.Column="0" Text="{Binding Path=LocalizedResources.InterestAmoutLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TextBlockInformationLabelStyle}"  />
+                    <TextBox x:Name="InterestsAmountTaxesData" Grid.Row="2" Grid.Column="1" Style="{StaticResource MainTextBoxStyle}"   Text="{Binding InterestsAmount, Mode=OneWay}" IsHitTestVisible="False"/>
+                    <TextBlock x:Name="SpecificWasteLabel" Grid.Row="3" Grid.Column="0" Text="{Binding Path=LocalizedResources.SpecificWasteTaxesLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TextBlockInformationLabelStyle}"  />
+                    <TextBox x:Name="SpecificWasteTaxesData" Grid.Row="3" Grid.Column="1" Style="{StaticResource MainTextBoxStyle}"   Text="{Binding SpecificWasteObligations, Mode=OneWay}" IsHitTestVisible="False"/>
+                    <TextBlock x:Name="TotalAmountLabel" Grid.Row="4" Grid.Column="0" Text="{Binding Path=LocalizedResources.TotalDebtLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TextBlockInformationLabelStyle}" />
+                    <TextBox x:Name="TotalAmountData" Grid.Row="4" Grid.Column="1" Style="{StaticResource MainTextBoxStyle}"   Text="{Binding TotalObligations, Mode=OneWay}" IsHitTestVisible="False"/>
+                </Grid>
+
+                <Button Click="PayButton_Click" Visibility="{Binding PayButtonVisible}" Height="88" BorderBrush="#FFE8E8E8">
+                    <TextBox Foreground="WhiteSmoke" TextAlignment="Center" Text="{Binding LocalizedResources.PayButtonLabel, Source={StaticResource LocalizedStrings}}" Width="428" Height="92" Margin="0,-20,0,0"  IsHitTestVisible="False" BorderBrush="#FFE8E8E8">
+                        <TextBox.Background>
+                            <ImageBrush ImageSource="images/img_btn.png" />
+                        </TextBox.Background>
+                    </TextBox>
+                </Button>
+            </StackPanel>
+
+            <TextBlock Visibility="{Binding MissingPersonalDataMessageVisible}" Style="{StaticResource WarningStyle}" Text="{Binding Path=LocalizedResources.NoPersonalDataInSettings, Source={StaticResource LocalizedStrings}}" />
+
+        </StackPanel>
+
+        <StackPanel x:Name="PaymentInformationContent" Visibility="Collapsed" Grid.Row="1">
+            <ScrollViewer>
+                <StackPanel Visibility="{Binding PaymentFormVisible}">
+                    <Grid x:Name="PaymentInformation">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="115*"/>
+                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="103*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock x:Name="TotalDebtLabel" Grid.Row="0" Grid.Column="0" Text="{Binding LocalizedResources.TotalDebtLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TextBlockInformationLabelStyle}" />
+                        <TextBox x:Name="TotalDebtData" Grid.Row="0" Grid.Column="2" Style="{StaticResource MainTextBoxStyle}"   Text="{Binding TotalPaymentAmount, Mode=OneWay}" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Grid.ColumnSpan="2">
+                            <TextBox.RenderTransform>
+                                <CompositeTransform Rotation="-0.221"/>
+                            </TextBox.RenderTransform>
+                        </TextBox>
+                        <TextBlock x:Name="CardInformationLabel" Grid.Row="1" Grid.ColumnSpan="4"  Style="{StaticResource CardInformationLabelStyle}" Text="{Binding LocalizedResources.CardInformationLabel, Source={StaticResource LocalizedStrings}}"/>
+                        <TextBlock x:Name="CreditCardNumberLabel" Grid.Row="2" Grid.Column="0" Text="{Binding LocalizedResources.CreditCardNumberLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TextBlockInformationLabelStyle}" />
+                        <TextBox x:Name="CreditCardNumberTextBox" Grid.Row="2" Grid.Column="2" Style="{StaticResource MainTextBoxStyle}"   Text="{Binding CreditCardNumber, Mode=TwoWay}" Grid.ColumnSpan="2" />
+                        <TextBlock x:Name="CreditCardTypeLabel" Grid.Row="3" Grid.Column="0" Text="{Binding LocalizedResources.CardTypeLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TextBlockInformationLabelStyle}" />
+
+                        <toolkit:ListPicker  ExpansionMode="ExpansionAllowed" x:Name="CreditCardTypeTextBox" Grid.Row="3" Grid.Column="2" Background="WhiteSmoke" Foreground="Black"  Grid.ColumnSpan="2" Margin="12,4.748,12,31.252" BorderBrush="Black" BorderThickness="1" >
+                        </toolkit:ListPicker>
+
+                        <TextBlock x:Name="CreditCardExpiryDateLabel" Grid.Row="3" Grid.Column="0" Text="{Binding LocalizedResources.CardExpiryDate, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TextBlockInformationLabelStyle}" Margin="0,71,0,59" Grid.RowSpan="3" />
+
+                        <Canvas x:Name="CreditCardExpirationDatePicker" Grid.Row="4" Grid.Column="3" Margin="39,10,138,10">
+                            <toolkit:ListPicker x:Name="YearList" Height="65" Width="106"  Canvas.Left="61" Canvas.Top="-35" Margin="0" Background="WhiteSmoke" Foreground="Black" BorderBrush="Black" BorderThickness="1"/>
+                            <toolkit:ListPicker x:Name="MonthList"  Height="65" RenderTransformOrigin="-1.034,0.603" Width="105" Canvas.Left="-49" Margin="0" Canvas.Top="-35" Background="WhiteSmoke" Foreground="Black" BorderBrush="Black" BorderThickness="1" />
+                        </Canvas>
+
+                        <TextBlock x:Name="CreditCardHolderNameLabel" Grid.Row="5" Grid.Column="0" Text="{Binding LocalizedResources.CardHolderNameLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TextBlockInformationLabelStyle}" Margin="0,25,0,0"/>
+                        <TextBox x:Name="CreditCardHolderNameTextBox" Grid.Row="5" Grid.Column="2" Style="{StaticResource MainTextBoxStyle}"   Text="{Binding CreditCardHolderName, Mode=TwoWay}" Grid.ColumnSpan="2" Margin="0,20,0,0"/>
+
+                        <StackPanel x:Name="ValidationPanel" Grid.Row="6" Grid.ColumnSpan="4">
+                            <TextBlock x:Name="CardNumberValidation" HorizontalAlignment="Center" Text="{Binding Path=LocalizedResources.CreditCardNumberValidationMessage, Source={StaticResource LocalizedStrings}}" Style="{StaticResource WarningStyle}" Visibility="{Binding CreditCardNumberValidationMessageVivisble}"/>
+                            <TextBlock x:Name="CardHolderNameValidation" HorizontalAlignment="Center" Text="{Binding Path=LocalizedResources.CreditCardHolderNameValidationMessage, Source={StaticResource LocalizedStrings}}" Style="{StaticResource WarningStyle}" Visibility="{Binding CreditCardHolderNameValidationMessageVisisble}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Button x:Name="PaymentButton" Command="{Binding PaymentCommand}" Padding="0,10,0,-20" BorderBrush="#FFE8E8E8">
+                        <TextBox Foreground="WhiteSmoke" TextAlignment="Center" Text="{Binding LocalizedResources.PayButtonLabel, Source={StaticResource LocalizedStrings}}" Width="428" Height="92" Margin="0,-20,0,0"  IsHitTestVisible="False" Padding="0,0,0,0" BorderBrush="#FFE8E8E8">
+                            <TextBox.Background>
+                                <ImageBrush ImageSource="images/img_btn.png" />
+                            </TextBox.Background>
+                        </TextBox>
+                    </Button>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <TextBlock x:Name="PaymentSucces" Style="{StaticResource WarningStyle}" Text="{Binding Path=LocalizedResources.PaymentMadeLabel, Source={StaticResource LocalizedStrings}}" Visibility="{Binding PaymentMadeLabelVisible}"/>
+        </StackPanel>
+
+        <StackPanel x:Name="SpecificWasteRequestContent" Visibility="Collapsed" Grid.Row="1">
+
+            <StackPanel >
+                <TextBlock x:Name="SpecificWastePageLabel" HorizontalAlignment="Center" Text="{Binding Path=LocalizedResources.SpecificWasteRequest, Source={StaticResource LocalizedStrings}}" Style="{StaticResource TextBlockInformationLabelStyle}" Foreground="#FF457100" FontWeight="Bold"/>
+
+                <Grid x:Name="SpecificWasteInformation" Grid.Row="1" Margin="32,0,12,0" Visibility="{Binding SpecificWasteButtonsVisible, Mode=TwoWay}">
+                    <!--<phone:LongListSelector x:Name="MainLongListSelector" Margin="0,0,0,0" LayoutMode="Grid" GridCellSize="200,200" ItemsSource="{Binding SpecificWasteImages}"  SelectionChanged="MainLongListSelector_SelectionChanged">
+                        <phone:LongListSelector.ItemTemplate>
+                            <DataTemplate>
+                                <Button x:Name="fefefe" Content="Click me!" Click="PayButton_Click" BorderBrush="Green"  >
+                                    --><!--<Grid >
+                                        <Image  Source="{Binding ImageURI}" Stretch="Fill" />
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding Label}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" />
+                                        
+                                    </Grid>--><!--
+                                </Button>
+                            </DataTemplate>
+                        </phone:LongListSelector.ItemTemplate>
+                    </phone:LongListSelector>-->
+                    <phone:LongListSelector x:Name="MainLongListSelector" Margin="0,0,0,0" LayoutMode="Grid" GridCellSize="200,200" ItemsSource="{Binding SpecificWasteImages}"  SelectionChanged="MainLongListSelector_SelectionChanged" >
+                        <phone:LongListSelector.ItemTemplate>
+                            <DataTemplate>
+                                <Button x:Name="fefefe"  BorderBrush="#FFE8E8E8" Command="{Binding SubmitSpecificRequestCommand}">
+                                    <Grid>
+                                        <Image  Source="{Binding ImageURI}" Stretch="Fill" />
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding Label}" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" />
+                                    </Grid>
+                                </Button>
+                            </DataTemplate>
+                        </phone:LongListSelector.ItemTemplate>
+                    </phone:LongListSelector>
+                </Grid>
+                <TextBlock x:Name="SpecificWasteRequestSentMessageTextBlock"  Margin="0,50,0,0"  Style="{StaticResource WarningStyle}" Visibility="Collapsed"/>
+            </StackPanel>
+
+            <TextBlock Visibility="{Binding MissingPersonalDataMessageVisible}" Style="{StaticResource WarningStyle}" Text="{Binding Path=LocalizedResources.NoPersonalDataInSettings, Source={StaticResource LocalizedStrings}}" />
+        </StackPanel>
+
+        <StackPanel x:Name="SettingsContent" Grid.Row="1" Visibility="Collapsed" >
+            <StackPanel x:Name="SettingsDataStack" Visibility="{Binding SettingsDataVisible}">
+                <TextBlock x:Name="ConfigurationLabel" Style="{StaticResource CardInformationLabelStyle}" HorizontalAlignment="Center" Margin="0,20,0,0" Text="{Binding LocalizedResources.ConfigurationLabel, Source={StaticResource LocalizedStrings}}" Height="69"/>
+                <TextBlock Text="{Binding Path=LocalizedResources.IdentityNumberMessage, Source={StaticResource LocalizedStrings}}" Margin="2,30,44,-20" Style="{StaticResource IdentityNumberMessageStyle }" />
+                <TextBox Margin="66,30,66,0" Height="81" Style="{StaticResource MainTextBoxStyle}" Text="{Binding PersonalIdentityNumber, Mode=TwoWay}"/>
+                <TextBlock Text="{Binding Path=LocalizedResources.PersonalIdentityNumberRequiredLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource ValidationButtonStyle}"  Visibility="{Binding PersonalIdentityValidationLabelVisible}" />
+
+                <TextBlock Text="{Binding Path=LocalizedResources.FullNameMessage, Source={StaticResource LocalizedStrings}}" Margin="2,30,67,-20" Style="{StaticResource IdentityNumberMessageStyle}" />
+                <TextBox Margin="66,30,66,0" Height="81" Style="{StaticResource MainTextBoxStyle}" Text="{Binding PersonFullName, Mode=TwoWay}"/>
+                <TextBlock Text="{Binding Path=LocalizedResources.PersonFullNameRequiredLabel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource ValidationButtonStyle}" Visibility="{Binding PersonFullNameValidationLabelVisible}" />
+
+                <Button  Padding="0,10,0,-20" BorderBrush="#FFE8E8E8" Command="{Binding SavePersonalInformationInSettingsCommand}">
+                    <Button.Content>
+                        <TextBox  Foreground="WhiteSmoke" TextAlignment="Center" Text="{Binding LocalizedResources.SaveButtonLabel, Source={StaticResource LocalizedStrings}}" FontSize="30" Width="428" Height="92" Margin="0,-20,0,0"  IsHitTestVisible="False" Padding="0,0,0,0" BorderBrush="#FFE8E8E8" >
+                            <TextBox.Background>
+                                <ImageBrush ImageSource="images/img_btn.png" />
+                            </TextBox.Background>
+                        </TextBox>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <TextBlock x:Name="SaveMessageTextBlock" Style="{StaticResource WarningStyle}" Text="{Binding Path=LocalizedResources.SettingsSavedLabel, Source={StaticResource LocalizedStrings}}" Visibility="{Binding SaveMessageVisible}" />
+        </StackPanel>
+
+        <StackPanel x:Name="FooterContent" VerticalAlignment="Bottom"  Grid.Row="2">
+            <Grid x:Name="FooterRoot" Background="#FF1F1E1E" Height="80">
+
+                <Image Name="imgHome" Source="/images/home.png" Tap="Home_Tap" Height="62" Margin="154,10,252,6" Visibility="Collapsed" ></Image>
+                <Image Name="imgAbout" Source="/images/i.png" Tap="About_Tap" Height="62" Margin="147,10,155,6" RenderTransformOrigin="0.641,0.339"></Image>
+            </Grid>
+        </StackPanel>
+    </Grid>
+
+</phone:PhoneApplicationPage>
